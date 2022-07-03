@@ -8,6 +8,8 @@ interface ITaskItemComponent {
     item: ITaskItem;
     draggableId: string;
     index: number;
+    setSelectedTask: React.Dispatch<React.SetStateAction<ITaskItem | null>>;
+    setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const useStyles = makeStyles({
@@ -29,7 +31,9 @@ const useStyles = makeStyles({
 const TaskItemComponent: React.FC<ITaskItemComponent> = ({
     item,
     draggableId,
-    index
+    index,
+    setSelectedTask,
+    setIsModalOpen,
 }) => {
     const classes = useStyles();
     return (
@@ -39,10 +43,13 @@ const TaskItemComponent: React.FC<ITaskItemComponent> = ({
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={snapshot.isDragging ? classes.draggingListItem : item.status === 'open' ? 
+                    className={snapshot.isDragging ? classes.draggingListItem : item.status === 'Open' ? 
                         classes.openItemStyle : classes.closeItemStyle
                     }
-                    onClick={() => alert(JSON.stringify(item))}
+                    onClick={() => {
+                        setSelectedTask(item);
+                        setIsModalOpen(true);
+                    }}
                 >
                     <Typography variant='h5'>{item.title}</Typography>
                     <Typography variant='subtitle2'>Assigned to: {item.assignedTo}</Typography>

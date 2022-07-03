@@ -23,6 +23,7 @@ const Container: React.FC = () => {
     const [toDoItems, setToDoItems] = useState<ITaskItem[]>(toDoList);
     const [doneItems, setDoneItems] = useState<ITaskItem[]>(taskDone);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [selectedTask, setSelectedTask] = useState<ITaskItem | null>(null);
 
     const onDragEnd = ({ destination, source }: DropResult) => {
         if(!destination) return;
@@ -49,7 +50,7 @@ const Container: React.FC = () => {
                     const sourceList = Array.from(doneItems);
                     const destinationList = Array.from(toDoItems);
                     const [removedDone] = sourceList.splice(source.index, 1);
-                    destinationList.splice(destination.index, 0, { ...removedDone, status: 'open' });
+                    destinationList.splice(destination.index, 0, { ...removedDone, status: 'Open' });
                     setToDoItems(destinationList);
                     setDoneItems(sourceList);
                 }
@@ -58,7 +59,7 @@ const Container: React.FC = () => {
                     const sourceList = Array.from(toDoItems);
                     const destinationList = Array.from(doneItems);
                     const [removedToDo] = sourceList.splice(source.index, 1);
-                    destinationList.splice(destination.index, 0, { ...removedToDo, status: 'close' });
+                    destinationList.splice(destination.index, 0, { ...removedToDo, status: 'Close' });
                     setToDoItems(sourceList);
                     setDoneItems(destinationList);
                 }
@@ -82,7 +83,18 @@ const Container: React.FC = () => {
             spacing={0}
             style={{ maxHeight: '60%', width: '80%', margin: 'auto' }}
         >  
-            <DialogForm isOpen={isModalOpen} handleClose={handleClose} />
+            {isModalOpen && (
+                <DialogForm
+                    isOpen={isModalOpen}
+                    handleClose={handleClose}
+                    toDoItems={toDoItems}
+                    doneItems={doneItems}
+                    setToDoItems={setToDoItems}
+                    setDoneItems={setDoneItems}
+                    selectedTask={selectedTask}
+                    setSelectedTask={setSelectedTask}
+                />
+            )}
             <Grid item xs={9}>
                 <Paper 
                     elevation={0}
@@ -117,10 +129,20 @@ const Container: React.FC = () => {
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Grid container spacing={0}>
                         <Grid item xs={6} style={{ padding: '0 12px 0 12px' }}>
-                            <TaskItemListComponent droppableId='task-to-do' items={toDoItems} />
+                            <TaskItemListComponent
+                                droppableId='task-to-do'
+                                items={toDoItems}
+                                setSelectedTask={setSelectedTask}
+                                setIsModalOpen={setIsModalOpen}
+                            />
                         </Grid>
                         <Grid item xs={6} style={{ padding: '0 12px 0 12px' }}>
-                            <TaskItemListComponent droppableId='task-done' items={doneItems} />
+                            <TaskItemListComponent
+                                droppableId='task-done'
+                                items={doneItems}
+                                setSelectedTask={setSelectedTask}
+                                setIsModalOpen={setIsModalOpen}
+                            />
                         </Grid>
                     </Grid>
                 </DragDropContext>
