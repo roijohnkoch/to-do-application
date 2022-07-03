@@ -2,7 +2,10 @@
 
 Created with [React JS](https://reactjs.org/).
 
-A simple to-do list applications that uses draggable components. Can add / edit task with corresponding input fields.
+A simple to-do list applications that uses draggable components. 
+
+Can add / edit task with corresponding input fields.
+
 Implements basic form validation.
 
 ## Scripts
@@ -33,5 +36,7 @@ Will run all unit test and creates a HTML file that is consist of the coverage o
 ## Libraries used
 
 UI Tools: [Material-UI / MUI](https://mui.com/)
+
 Draggable components: [react-beautiful-dnd](https://github.com/atlassian/react-beautiful-dnd)
+
 Form Handlers: [react-hook-form](https://react-hook-form.com/)
