@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Dialog, Button, TextField, Autocomplete, Grid, Switch, Typography  } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import { useForm, Controller } from "react-hook-form";
-import { ITaskItem } from '../types/types';
-import { members } from '../__mocks__/mocks';
+import { ITaskItem, IMemberOption } from '../types/types';
 import moment from 'moment';
 
 interface IDialogForm {
@@ -21,11 +20,8 @@ interface IDialogForm {
     doneItems: ITaskItem[];
     setDoneItems: React.Dispatch<React.SetStateAction<ITaskItem[]>>;
     setSelectedTask: React.Dispatch<React.SetStateAction<ITaskItem | null>>;
-}
-
-interface IMemberOption {
-    inputValue?: string;
-    member: string;
+    membersList: IMemberOption[];
+    setMembersList: React.Dispatch<React.SetStateAction<IMemberOption[]>>;
 }
 
 const DialogForm: React.FC<IDialogForm> = ({
@@ -36,7 +32,9 @@ const DialogForm: React.FC<IDialogForm> = ({
     setToDoItems,
     doneItems,
     setDoneItems,
-    setSelectedTask
+    setSelectedTask,
+    membersList,
+    setMembersList
 }) => {
     const defaultValues = {
         title: selectedTask ? selectedTask.title : '',
@@ -56,7 +54,6 @@ const DialogForm: React.FC<IDialogForm> = ({
         setError,
     } = useForm({ defaultValues: defaultValues });
 
-    const [membersList, setMembersList] = useState<IMemberOption[]>(members);
     const [statusLabel, setStatusLabel] = useState<string>(selectedTask ? selectedTask.status : 'Open');
 
     const filter = createFilterOptions<IMemberOption>();
@@ -166,7 +163,7 @@ const DialogForm: React.FC<IDialogForm> = ({
                                 variant='outlined'
                                 error={errors.hasOwnProperty('title')}
                                 fullWidth
-                                {...register('title', { required: true, maxLength: 80,  })}
+                                {...register('title', { required: true })}
                                 helperText={errors.hasOwnProperty('title') && 'Title field is required'}
                                 style={{ marginBottom: 12 }}
                             />
@@ -186,8 +183,8 @@ const DialogForm: React.FC<IDialogForm> = ({
                                 rows={2}
                                 error={errors.hasOwnProperty('description')}
                                 fullWidth
-                                {...register('description', { maxLength: 10 })}
-                                helperText={errors.hasOwnProperty('description') && 'You can not use more than 10 characters'}
+                                {...register('description', { maxLength: 30 })}
+                                helperText={errors.hasOwnProperty('description') && 'You can not use more than 30 characters'}
                                 style={{ marginBottom: 12 }}
                             />
                         )}
@@ -274,7 +271,7 @@ const DialogForm: React.FC<IDialogForm> = ({
                                     formState: { errors }
                                 }) => (
                                     <LocalizationProvider dateAdapter={AdapterMoment}>
-                                        <DatePicker
+                                        <MobileDatePicker
                                             disablePast
                                             label="Due date"
                                             openTo="year"

@@ -6,3 +6,8 @@ export interface ITaskItem {
     dueDate: string,
     status: string,
 };
+
+export interface IMemberOption {
+    inputValue?: string;
+    member: string;
+}

@@ -5,8 +5,8 @@ import { styled } from '@mui/material/styles';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import TaskItemListComponent from './TaskItemListComponent';
 import DialogForm from './DialogForm';
-import { toDoList, taskDone } from '../__mocks__/mocks';
-import { ITaskItem } from '../types/types';
+import { toDoList, taskDone, members } from '../__mocks__/mocks';
+import { ITaskItem, IMemberOption } from '../types/types';
 
 const LabelHeader = styled(Paper)({
     boxShadow: 'none',
@@ -24,6 +24,7 @@ const Container: React.FC = () => {
     const [doneItems, setDoneItems] = useState<ITaskItem[]>(taskDone);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [selectedTask, setSelectedTask] = useState<ITaskItem | null>(null);
+    const [membersList, setMembersList] = useState<IMemberOption[]>(members);
 
     const onDragEnd = ({ destination, source }: DropResult) => {
         if(!destination) return;
@@ -93,9 +94,11 @@ const Container: React.FC = () => {
                     setDoneItems={setDoneItems}
                     selectedTask={selectedTask}
                     setSelectedTask={setSelectedTask}
+                    membersList={membersList}
+                    setMembersList={setMembersList}
                 />
             )}
-            <Grid item xs={9}>
+            <Grid item xs={12}>
                 <Paper 
                     elevation={0}
                     style={{
@@ -106,9 +109,19 @@ const Container: React.FC = () => {
                     }}
                 >
                     To Do List
+                    <Button
+                        variant='contained'
+                        color='success'
+                        size='small'
+                        startIcon={<AddIcon />}
+                        onClick={handleClickAddTask}
+                        style={{ marginLeft: 24 }}
+                    >
+                        <Typography fontSize={12}>Add Task</Typography>
+                    </Button>
                 </Paper>
             </Grid>
-            <Grid item xs={3} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {/* <Grid item xs={3} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Button
                     variant='contained'
                     color='success'
@@ -118,7 +131,7 @@ const Container: React.FC = () => {
                 >
                     <Typography fontSize={12}>Add Task</Typography>
                 </Button>
-            </Grid>
+            </Grid> */}
             <Grid item xs={6} style={{ padding: '0 12px 0 12px' }}>
                 <LabelHeader>TO DO</LabelHeader>
             </Grid>
